@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@utils/database";
-import Prompt from "@models/event";
+import Event from "@models/event";
 // GET (read)
 
 //this is a get request that fetches all prompts from the database
@@ -10,38 +10,39 @@ export const GET = async (request, { params }) => {
   try {
     await connectToDatabase();
 
-    const prompt = await Prompt.findById(params.id).populate("creator");
-    if (!prompt) {
-      return new Response("Prompt not found", { status: 404 });
+    const event = await Event.findById(params.id).populate("creator");
+    if (!event) {
+      return new Response("Event not found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(prompt), { status: 200 });
+    return new Response(JSON.stringify(event), { status: 200 });
   } catch (error) {
-    return new Response("Failed to fetch all prompts", { status: 500 });
+    return new Response("Failed to fetch all events", { status: 500 });
   }
 };
 
 // PATCH (update)
 export const PATCH = async (request, { params }) => {
-  const { prompt, tag, image } = await request.json();
+  const { title, tag, description, image } = await request.json();
 
   try {
     await connectToDatabase();
 
-    const existingPrompt = await Prompt.findById(params.id);
+    const existingEvent = await Event.findById(params.id);
 
-    if (!existingPrompt) {
-      return new Response("Prompt not found", { status: 404 });
+    if (!existingEvent) {
+      return new Response("event not found", { status: 404 });
     }
 
-    existingPrompt.prompt = prompt;
-    existingPrompt.tag = tag;
-    existingPrompt.image = image;
+    existingEvent.title = title;
+    existingEvent.description = description;
+    existingEvent.tag = tag;
+    existingEvent.image = image;
 
-    await existingPrompt.save();
-    return new Response(JSON.stringify(existingPrompt), { status: 200 });
+    await existingEvent.save();
+    return new Response(JSON.stringify(existingEvent), { status: 200 });
   } catch (error) {
-    return new Response("Failed to update prompt", { status: 500 });
+    return new Response("Failed to update event", { status: 500 });
   }
 };
 
@@ -50,10 +51,10 @@ export const DELETE = async (request, { params }) => {
   try {
     await connectToDatabase();
 
-    await Prompt.findByIdAndRemove(params.id);
+    await Event.findByIdAndRemove(params.id);
 
-    return new Response(JSON.stringify({ message: "Prompt deleted successfully" }), { status: 200 })
+    return new Response(JSON.stringify({ message: "Event deleted successfully" }), { status: 200 })
   } catch (error) {
-    return new Response("Failed to delete prompt", { status: 500 })
+    return new Response("Failed to delete event", { status: 500 })
   }
 }
