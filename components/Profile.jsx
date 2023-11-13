@@ -28,7 +28,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
       <div className='flex  items-center mt-8 justify-between'>
         <h1 className='text-2xl font-bold'>Posztjaim</h1>
         <Link href='/create-post'><button className=' bg-mainGreen rounded-full p-2 mx-2 hover:bg-hoverGreen hidden md:flex'><Plus className='mr-1' />Új poszt létrehozása</button></Link>
-        <Link href='/create-post'><button className='flex md:hidden bg-mainGreen rounded-full p-2 mx-2 hover:bg-hoverGreen' href="/create-post"><Plus /></button></Link>
+        <Link href='/create-post' className='flex md:hidden bg-mainGreen rounded-full p-2 mx-2 hover:bg-hoverGreen'><Plus /></Link>
       </div>
       <div className="mt-10 prompt_layout">
         {data.map((post) => {
