@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@utils/database";
-import Prompt from "@models/prompt";
+import Prompt from "@models/event";
 // GET (read)
 
 //this is a get request that fetches all prompts from the database
@@ -47,13 +47,13 @@ export const PATCH = async (request, { params }) => {
 
 // DELETE (delete)
 export const DELETE = async (request, { params }) => {
-    try {
-        await connectToDatabase();
+  try {
+    await connectToDatabase();
 
-        await Prompt.findByIdAndRemove(params.id);
+    await Prompt.findByIdAndRemove(params.id);
 
-        return new Response(JSON.stringify({message: "Prompt deleted successfully"}), {status: 200})
-    } catch (error) {
-        return new Response("Failed to delete prompt", {status: 500})
-    }
+    return new Response(JSON.stringify({ message: "Prompt deleted successfully" }), { status: 200 })
+  } catch (error) {
+    return new Response("Failed to delete prompt", { status: 500 })
+  }
 }
