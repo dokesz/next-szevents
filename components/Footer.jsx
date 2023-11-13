@@ -11,7 +11,6 @@ export default function Footer() {
                 <div className="flex flex-col items-center md:items-end">
                     <p>9026 Győr, Egyetem tér 1. </p>
                     <Link href="mailto:help@szevents.hu">help@szevents.hu</Link>
-                    <Link href="/kapcsolat">Kapcsolat</Link>
                 </div>
             </div>
         </div>
