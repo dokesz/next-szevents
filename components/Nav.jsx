@@ -52,6 +52,12 @@ export default function Nav() {
               <Link key={link.id} href={link.href}>{link.label}</Link>
             )
           })}
+
+          {status === "authenticated" ? (
+            <button onClick={() => signOut()}>Kijelentkezés</button>
+          ) : (
+            <Link href="/signIn">Bejelentkezés</Link>
+          )}
         </div>
       )}
     </nav>
