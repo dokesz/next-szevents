@@ -13,16 +13,14 @@ const EditPrompt = () => {
   const promptId = searchParams.get("id");
 
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({ prompt: "", tag: "", image: "" });
+  const [post, setPost] = useState({ title: "", tag: "", description: "", image: "" });
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      const response = await fetch(`/api/prompt/${promptId}`);
+      const response = await fetch(`/api/szevent/${promptId}`);
       const data = await response.json();
 
-
-      console.log("Fetched data.image:", data.image);
-      setPost({ prompt: data.prompt, tag: data.tag, image: data.image });
+      setPost({ title: data.title, tag: data.tag, image: data.image, description: data.description });
     };
     if (promptId) getPromptDetails();
   }, [promptId]);
@@ -37,11 +35,12 @@ const EditPrompt = () => {
     if (!promptId) return alert("Prompt ID not found");
 
     try {
-      const response = await fetch(`/api/prompt/${promptId}`, {
+      const response = await fetch(`/api/szevent/${promptId}`, {
         method: "PATCH",
         body: JSON.stringify({
-          prompt: post.prompt,
+          title: post.title,
           tag: post.tag,
+          description: post.description,
           image: post.image
         }),
       });
@@ -58,7 +57,7 @@ const EditPrompt = () => {
 
   return (
     <Form
-      type="Edit"
+      type="Szerkesztés"
       post={post}
       setPost={setPost}
       submitting={submitting}
