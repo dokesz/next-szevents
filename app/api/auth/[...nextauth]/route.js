@@ -1,10 +1,12 @@
-import NextAuth from "next-auth/next";
-import GoogleProvider from "next-auth/providers/google";
-
-import User from "@models/user";
-import { connectToDatabase } from "@utils/database";
+import User from "@/models/user";
+import { connectToDatabase } from "@/utils/database";
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
 
 const handler = NextAuth({
+  pages: {
+    signIn: '/signIn',
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -23,16 +25,15 @@ const handler = NextAuth({
       try {
         await connectToDatabase();
 
-        //check if a use already exists
         const userExists = await User.findOne({ email: profile.email });
 
-        //if not, create a new user
         if (!userExists) {
           await User.create({
+            name: profile.name,
             email: profile.email,
-            username: profile.name.replace(" ", "").toLowerCase(),
             image: profile.picture,
-          });
+            isAdmin: false,
+          })
         }
 
         return true;
@@ -40,8 +41,8 @@ const handler = NextAuth({
         console.log(error);
         return false;
       }
-    },
+    }
   }
-});
+})
 
 export { handler as GET, handler as POST };

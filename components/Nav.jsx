@@ -1,118 +1,60 @@
-"use client"
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Menu, X } from 'lucide-react';
 
-const Nav = () => {
-  const { data: session, status } = useSession();
-  const [toggleDropdown, setToggleDropdown] = useState(false);
+export default function Nav() {
+  const { status } = useSession();
+  const [showLinks, setShowLinks] = useState(false);
 
-  const loadingState = status === "loading";
-  const loadingStyle = loadingState ? "opacity-50 cursor-not-allowed" : "";
+  const links = [
+    { href: "/", label: "Rendezvények", id: "rendezveny" },
+    { href: "/profile", label: "Profil", id: "profil" },
+  ]
+
 
   return (
-    <nav className="flex justify-between w-full mb-16 pt-3">
-      <Link href="/" className="flex gap-2 items-center">
-        <Image
-          src="/assets/images/logo.svg"
-          alt="logo"
-          width={30}
-          height={30}
-          className="object-contain"
-        />
-        <p className="logo_text">Prompt</p>
-      </Link>
+    <nav>
 
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex">
-        {status === "authenticated" && (
-          <div className={`flex gap-3 md:gap-5 ${loadingStyle}`}>
-            <Link href="/create-prompt" className="black_btn">
-              Create Post
-            </Link>
-            <button type="button" onClick={signOut} className="outline_btn" disabled={status === "loading"}>
-              Sign Out
-            </button>
-            <Link href="/profile">
-              <Image
-                src={session?.user.image}
-                width={37}
-                height={37}
-                className="rounded-full"
-                alt="profile"
-              />
-            </Link>
-          </div>
-        )}
-        {status !== "authenticated" && (
-          <button
-            type="button"
-            onClick={() => signIn("google")}
-            className={`black_btn ${loadingStyle}`}
-            disabled={status === "loading"}
-          >
-            Sign in with Google
-          </button>
-        )}
+      <div className="md:flex justify-between items-center gap-6 hidden">
+        <div className="flex items-center min-h-[50px]">
+          <Image src="/szevents-logo.png" width={160} height={160} />
+        </div>
+        <div className="flex gap-4">
+          {links.map((link) => {
+            return (
+              <Link key={link.id} href={link.href}>{link.label}</Link>
+            )
+          })}
+
+          {status === "authenticated" ? (
+            <button onClick={() => signOut()}>Kijelentkezés</button>
+          ) : (
+            <Link href="/signIn">Bejelentkezés</Link>
+          )}
+        </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <div className="flex md:hidden relative">
-        {status === "authenticated" && (
-          <div className={`flex ${loadingStyle}`}>
-            <Image
-              src={session?.user.image}
-              width={37}
-              height={37}
-              className="rounded-full"
-              alt="profile"
-              onClick={() => setToggleDropdown(!toggleDropdown)}
-            />
-            {toggleDropdown && (
-              <div className="dropdown">
-                <Link
-                  href="/profile"
-                  className="dropdown_link"
-                  onClick={() => setToggleDropdown(false)}
-                >
-                  My Profile
-                </Link>
-                <Link
-                  href="/create-prompt"
-                  className="dropdown_link"
-                  onClick={() => setToggleDropdown(false)}
-                >
-                  Create Prompt
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setToggleDropdown(false);
-                    signOut();
-                  }}
-                  disabled={status === "loading"}
-                  className="mt-5 w-full black_btn"
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-        {status !== "authenticated" && (
-          <button
-            type="button"
-            onClick={() => signIn("google")}
-            className={`black_btn ${loadingStyle}`}
-            disabled={status === "loading"}
-          >
-            Sign in with Google
-          </button>
-        )}
+      <div className="md:hidden flex flex-row">
+        <Image src="/szevents-logo.png" width={160} height={160} />
+        <div className="flex flex-grow w-[50px] justify-end">
+          <button onClick={() => setShowLinks(!showLinks)}>{showLinks ? <X /> : <Menu />}</button>
+        </div>
       </div>
-    </nav >
-  );
-};
 
-export default Nav;
+      {showLinks && (
+        <div className="flex flex-col basis-full items-end md:hidden mt-4 gap-4 transition-transform ease-in-out duration-500 ">
+          {links.map((link) => {
+            return (
+              <Link key={link.id} href={link.href}>{link.label}</Link>
+            )
+          })}
+        </div>
+      )}
+    </nav>
+
+  )
+}

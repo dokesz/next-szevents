@@ -24,7 +24,12 @@ const MyProfile = () => {
     if (session?.user.id) fetchPosts();
   }, [session?.user.id]);
 
-  if (!session) return <div>You&apos;re not signed in</div>;
+  if (!session) return (<div className='flex flex-col'>
+    <h1 className='text-2xl font-bold mt-4'>Guest</h1>
+    <p className='text-gray-500 text-sm'>
+      You are not logged in. Please login to view your profile.
+    </p>
+  </div>);
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`);
