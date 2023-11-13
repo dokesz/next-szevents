@@ -1,17 +1,21 @@
-import {Schema, model, models} from "mongoose";
+import { Schema, model, models } from "mongoose";
 
-const PromptSchema = new Schema({
+const EventSchema = new Schema({
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    prompt: {
+    title: {
         type: String,
         required: [true, 'Please provide a prompt.'],
     },
-    tag:{
+    tag: {
         type: String,
         required: [true, 'Please provide a tag.'],
+    },
+    description: {
+        type: String,
+        required: [true, 'Please provide a description.'],
     },
     image: {
         type: String,
@@ -19,6 +23,6 @@ const PromptSchema = new Schema({
     }
 });
 
-const Prompt = models.Prompt || model('Prompt', PromptSchema);
+const Event = models.Event || model('Event', EventSchema);
 
-export default Prompt;
+export default Event;

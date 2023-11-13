@@ -8,7 +8,7 @@ import Form from "@/components/Form";
 
 const CreatePrompt = () => {
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({ prompt: "", tag: "", image: "" });
+  const [post, setPost] = useState({ title: "", tag: "", description: "", image: "" });
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -24,12 +24,13 @@ const CreatePrompt = () => {
     setSubmitting(true);
 
     try {
-      const response = await fetch("/api/prompt/new", {
+      const response = await fetch("/api/szevent/new", {
         method: "POST",
         body: JSON.stringify({
-          prompt: post.prompt,
+          title: post.title,
           userId: session?.user.id,
           tag: post.tag,
+          description: post.description,
           image: post.image,
         }),
       });
@@ -46,7 +47,7 @@ const CreatePrompt = () => {
 
   return (
     <Form
-      type="Create"
+      type="létrehozás"
       post={post}
       setPost={setPost}
       submitting={submitting}

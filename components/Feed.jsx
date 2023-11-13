@@ -6,7 +6,7 @@ import PromptCard from "./PromptCard.jsx";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
-    <div className="mt-16 prompt_layout">
+    <div className="prompt_layout">
       {data.map((post) => {
         return (
           <PromptCard
@@ -26,6 +26,7 @@ const Feed = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
+  const [groupEvents, setGroupEvents] = useState([]);
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
@@ -42,7 +43,7 @@ const Feed = () => {
     const fetchPosts = async () => {
       if (isLoading) {
         try {
-          const response = await fetch("/api/prompt");
+          const response = await fetch("/api/szevent");
           if (!response.ok) {
             console.error(`Fetch error: ${response.status} - ${response.statusText}`);
             // Optionally, log the response body for more details
@@ -66,35 +67,62 @@ const Feed = () => {
   useEffect(() => {
     const filterPosts = posts.filter((post) => {
       return (
-        post.prompt.includes(searchText) ||
+        post.title.includes(searchText) ||
         post.tag.includes(searchText) ||
-        post.creator.username.includes(searchText)
+        post.creator.name.includes(searchText)
       );
     });
     setFilteredPosts(filterPosts);
   }, [searchText, session, posts]);
+
+  const groupPostsByTag = (posts) => {
+    return posts.reduce((acc, post) => {
+      const tag = post.tag || "Egyéb";
+      if (!acc[tag]) {
+        acc[tag] = [];
+      }
+      acc[tag].push(post);
+      return acc;
+    }, {});
+  };
+
+  useEffect(() => {
+    setGroupEvents(groupPostsByTag(posts));
+  }, [posts])
+
+  console.log(groupEvents);
 
   return (
     <section className="feed">
       <form className="relative w-full flex-center">
         <input
           type="text"
-          placeholder="Search for a tag or a username"
+          placeholder="Kereshetsz tag, cím vagy felhasználónév alapján"
           value={searchText}
           onChange={handleSearchChange}
           required
           className="search_input peer"
         />
       </form>
-      {isLoading ? (
-        <div>Loading</div>
+      {searchText === "" ? (
+        Object.entries(groupEvents).map(([tag, post]) => {
+          return (
+            <div key={tag}>
+              <h1 className="text-2xl mt-4 font-bold">{tag}</h1>
+              <PromptCardList
+                data={post}
+                handleTagClick={handleTagClick}
+              />
+            </div>
+          );
+        })
       ) : (
         <PromptCardList
-          data={!searchText ? posts : filteredPosts}
+          data={filteredPosts}
           handleTagClick={handleTagClick}
         />
       )}
-    </section>
+    </section >
   );
 };
 

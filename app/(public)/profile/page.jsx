@@ -40,7 +40,7 @@ const MyProfile = () => {
 
     if (hasConfirmed) {
       try {
-        const response = await fetch(`/api/prompt/${post._id}`, {
+        const response = await fetch(`/api/szevent/${post._id}`, {
           method: "DELETE",
         });
 
