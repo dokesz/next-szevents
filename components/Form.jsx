@@ -11,7 +11,6 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
   const handleUploadComplete = (res) => {
     // Do something with the response
     setPost({ ...post, image: res[0].url });
-    console.log(res[0].url);
     setUploadComplete(true); // Set upload status to complete
   };
 
