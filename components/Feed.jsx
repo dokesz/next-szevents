@@ -45,9 +45,7 @@ const Feed = () => {
       if (isLoading) {
         try {
           const response = await fetch("/api/szevent", {
-            next: {
-              revalidate: revalidatePath('/')
-            }
+            cache: "no-cache",
           });
           if (!response.ok) {
             console.error(`Fetch error: ${response.status} - ${response.statusText}`);
