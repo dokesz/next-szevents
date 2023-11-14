@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import PromptCard from "./PromptCard.jsx";
+import { revalidatePath } from "next/cache.js";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -43,7 +44,11 @@ const Feed = () => {
     const fetchPosts = async () => {
       if (isLoading) {
         try {
-          const response = await fetch("/api/szevent", { cache: "no-store" });
+          const response = await fetch("/api/szevent", {
+            next: {
+              revalidate: revalidatePath('/')
+            }
+          });
           if (!response.ok) {
             console.error(`Fetch error: ${response.status} - ${response.statusText}`);
             // Optionally, log the response body for more details
