@@ -44,9 +44,7 @@ const Feed = () => {
     const fetchPosts = async () => {
       if (isLoading) {
         try {
-          const response = await fetch("/api/szevent", {
-            cache: "no-cache",
-          });
+          const response = await fetch("/api/szevent");
           if (!response.ok) {
             console.error(`Fetch error: ${response.status} - ${response.statusText}`);
             // Optionally, log the response body for more details

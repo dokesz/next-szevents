@@ -10,6 +10,7 @@ export const GET = async () => {
     await connectToDatabase();
     const prompts = await Event.find({})
       .populate("creator", "-email")
+    console.log("prompts", prompts);
     return new Response(JSON.stringify(prompts), { status: 200 });
   } catch (error) {
     console.error("Failed to fetch all prompts:", error);
