@@ -10,7 +10,6 @@ export const GET = async () => {
     await connectToDatabase();
     const prompts = await Event.find({})
       .populate("creator", "-email")
-    console.log("prompts", prompts);
     return new Response(JSON.stringify(prompts), { status: 200 });
   } catch (error) {
     console.error("Failed to fetch all prompts:", error);
@@ -20,17 +19,3 @@ export const GET = async () => {
     );
   }
 };
-
-//how would this code would look like in express?
-// app.get('/api/prompt', async (req, res) => {
-//     try {
-//         await connectToDatabase();
-//
-//         const prompts = await Prompt.find({}).populate('creator');
-//
-//         res.status(200).json(prompts)
-//     } catch (error) {
-//         res.status(500).json({error: "Failed to fetch all prompts"})
-//     }
-
-// })

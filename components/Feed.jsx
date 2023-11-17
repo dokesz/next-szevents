@@ -65,6 +65,8 @@ const Feed = () => {
     fetchPosts();
   }, [isLoading]);
 
+  console.log('posts', posts);
+
   useEffect(() => {
     const filterPosts = posts.filter((post) => {
       return (
