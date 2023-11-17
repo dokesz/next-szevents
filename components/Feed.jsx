@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import PromptCard from "./PromptCard.jsx";
 import { revalidatePath } from "next/cache.js";
+import useSWR from 'swr'
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -23,11 +24,12 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
-  const [groupEvents, setGroupEvents] = useState([]);
+  const [groupEvents, setGroupEvents] = useState({});
+
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
@@ -40,58 +42,76 @@ const Feed = () => {
     setSearchText(tag);
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (isLoading) {
-        try {
-          const response = await fetch("/api/szevent");
-          if (!response.ok) {
-            console.error(`Fetch error: ${response.status} - ${response.statusText}`);
-            // Optionally, log the response body for more details
-            const responseBody = await response.text();
-            console.error(`Response body: ${responseBody}`);
-            throw new Error("Failed to fetch data");
-          }
-          const data = await response.json();
-          setPosts(data);
-        } catch (error) {
-          console.error("Failed to fetch posts:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
+  const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-    fetchPosts();
-  }, [isLoading]);
+  const { data: posts } = useSWR("/api/szevent", fetcher, {
+    revalidateOnFocus: true,
+  });
+
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     if (isLoading) {
+  //       try {
+  //         // const response = await fetch("/api/szevent");
+  //         if (!response.ok) {
+  //           console.error(`Fetch error: ${response.status} - ${response.statusText}`);
+  //           // Optionally, log the response body for more details
+  //           const responseBody = await response.text();
+  //           console.error(`Response body: ${responseBody}`);
+  //           throw new Error("Failed to fetch data");
+  //         }
+  //         // const data = await response.json();
+  //         // setPosts(data);
+  //       } catch (error) {
+  //         console.error("Failed to fetch posts:", error);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   };
+
+  //   fetchPosts();
+  // }, [isLoading]);
 
   console.log('posts', posts);
 
   useEffect(() => {
-    const filterPosts = posts.filter((post) => {
-      return (
-        post.title.includes(searchText) ||
-        post.tag.includes(searchText) ||
-        post.creator.name.includes(searchText)
-      );
-    });
-    setFilteredPosts(filterPosts);
+    if (posts) {
+
+      const filterPosts = posts.filter((post) => {
+        return (
+          post.title.includes(searchText) ||
+          post.tag.includes(searchText) ||
+          post.creator.name.includes(searchText)
+        );
+      });
+      setFilteredPosts(filterPosts);
+    }
   }, [searchText, session, posts]);
 
   const groupPostsByTag = (posts) => {
-    return posts.reduce((acc, post) => {
-      const tag = post.tag || "Egyéb";
-      if (!acc[tag]) {
-        acc[tag] = [];
-      }
-      acc[tag].push(post);
-      return acc;
-    }, {});
+    if (posts) {
+
+      return posts.reduce((acc, post) => {
+        const tag = post.tag || "Egyéb";
+        if (!acc[tag]) {
+          acc[tag] = [];
+        }
+        acc[tag].push(post);
+        return acc;
+      }, {});
+    }
   };
 
   useEffect(() => {
-    setGroupEvents(groupPostsByTag(posts));
-  }, [posts])
+    // Check if posts is defined before grouping
+    if (posts) {
+      setGroupEvents(groupPostsByTag(posts));
+    } else {
+      // If posts is undefined or null, set groupEvents to an empty object
+      setGroupEvents({});
+    }
+  }, [posts]);
 
   return (
     <section className="feed">
