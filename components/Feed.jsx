@@ -42,11 +42,17 @@ const Feed = () => {
     setSearchText(tag);
   };
 
-  const fetcher = (...args) => fetch(...args).then((res) => res.json())
+  const fetcher = (...args) => fetch(...args).then((res) => res.json()).then(data => {
+    console.log("API data:", data);
+    return data;
+  });
 
-  const { data: posts } = useSWR("/api/szevent", fetcher, {
+
+  const { data: posts, error } = useSWR("/api/szevent", fetcher, {
     revalidateOnFocus: true,
   });
+
+  if (error) console.log("SWR Error:", error);
 
   // useEffect(() => {
   //   const fetchPosts = async () => {
