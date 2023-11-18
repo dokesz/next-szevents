@@ -24,7 +24,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
-  // const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
@@ -42,44 +42,30 @@ const Feed = () => {
     setSearchText(tag);
   };
 
-  const fetcher = (...args) => fetch(...args).then((res) => res.json()).then(data => {
-    console.log("API data:", data);
-    return data;
-  });
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (isLoading) {
+        try {
+          const response = await fetch("/api/szevent", { method: "GET", cache: "no-store" });
+          if (!response.ok) {
+            console.error(`Fetch error: ${response.status} - ${response.statusText}`);
+            // Optionally, log the response body for more details
+            const responseBody = await response.text();
+            console.error(`Response body: ${responseBody}`);
+            throw new Error("Failed to fetch data");
+          }
+          const data = await response.json();
+          setPosts(data);
+        } catch (error) {
+          console.error("Failed to fetch posts:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
 
-
-  const { data: posts, error } = useSWR("/api/szevent", fetcher, {
-    revalidateOnFocus: true,
-    keepPreviousData: false,
-    revalidateOnMount: true,
-  });
-
-  if (error) console.log("SWR Error:", error);
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     if (isLoading) {
-  //       try {
-  //         // const response = await fetch("/api/szevent");
-  //         if (!response.ok) {
-  //           console.error(`Fetch error: ${response.status} - ${response.statusText}`);
-  //           // Optionally, log the response body for more details
-  //           const responseBody = await response.text();
-  //           console.error(`Response body: ${responseBody}`);
-  //           throw new Error("Failed to fetch data");
-  //         }
-  //         // const data = await response.json();
-  //         // setPosts(data);
-  //       } catch (error) {
-  //         console.error("Failed to fetch posts:", error);
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   };
-
-  //   fetchPosts();
-  // }, [isLoading]);
+    fetchPosts();
+  }, [isLoading]);
 
   console.log('posts', posts);
 
