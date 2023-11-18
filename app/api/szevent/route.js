@@ -5,7 +5,7 @@ import Event from "@models/event";
 //it is an async function that takes in a request object
 //it connects to the database and then fetches all prompts 
 
-export const GET = async () => {
+export const PUT = async () => {
   try {
     await connectToDatabase();
     const prompts = await Event.find({})
