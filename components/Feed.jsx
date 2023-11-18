@@ -50,6 +50,8 @@ const Feed = () => {
 
   const { data: posts, error } = useSWR("/api/szevent", fetcher, {
     revalidateOnFocus: true,
+    keepPreviousData: false,
+    revalidateOnMount: true,
   });
 
   if (error) console.log("SWR Error:", error);
