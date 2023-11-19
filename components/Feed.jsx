@@ -15,31 +15,42 @@ const Feed = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
+  const [posts, setPosts] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const fetcher = async (url) => {
-    const res = await fetch(url);
+  // const fetcher = async (url) => {
+  //   const res = await fetch(url);
 
-    if (!res.ok) {
-      const error = new Error('An error occurred while fetching the data.')
-      // Attach extra info to the error object.
-      error.info = await res.json()
-      error.status = res.status
-      throw error
-    }
+  //   if (!res.ok) {
+  //     const error = new Error('An error occurred while fetching the data.')
+  //     // Attach extra info to the error object.
+  //     error.info = await res.json()
+  //     error.status = res.status
+  //     throw error
+  //   }
 
-    return res.json()
-  }
+  //   return res.json()
+  // }
 
-  const product_url = '/api/szevent';
-  const { data: posts, error, isLoading } = useSWR(product_url, fetcher);
+  // const product_url = '/api/szevent';
+  // const { data: posts, error, isLoading } = useSWR(product_url, fetcher);
+
+  useEffect(() => {
+    fetch('/api/szevent')
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data)
+        setIsLoading(false)
+      })
+  }, [])
 
   useEffect(() => {
 
-    if (!posts || error) {
+    if (!posts) {
       return;
     }
 
-    if (!error && posts) {
+    if (posts) {
       const filterPosts = posts.filter(post =>
         post.title.includes(searchText) ||
         post.tag.includes(searchText) ||
@@ -55,13 +66,16 @@ const Feed = () => {
       }, {});
       setGroupEvents(groupedEvents);
     }
-  }, [searchText, posts, error]);
+  }, [searchText, posts]);
 
   const handleSearchChange = e => setSearchText(e.target.value);
   const handleTagClick = tag => setSearchText(tag);
 
-  if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Hiba az események betöltése során, kérlek frissítsd az oldalt!</div>;
-  if (!posts) return <div className="flex text-center mt-4">Posztok betöltése...</div>;
+  // if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Hiba az események betöltése során, kérlek frissítsd az oldalt!</div>;
+  // if (!posts) return <div className="flex text-center mt-4">Posztok betöltése...</div>;
+
+  if (isLoading) return <p>Posztok betöltése folyamatban van...</p>
+  if (!posts) return <p>Nincs megjeleníthető poszt</p>
 
   const displayData = searchText === "" ? groupEvents : filteredPosts;
   const isGrouped = searchText === "";
