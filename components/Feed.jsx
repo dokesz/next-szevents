@@ -36,12 +36,26 @@ const Feed = () => {
   // const { data: posts, error, isLoading } = useSWR(product_url, fetcher);
 
   useEffect(() => {
-    fetch('/api/szevent')
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data)
-        setIsLoading(false)
-      })
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/szevent");
+        if (!response.ok) {
+          console.error(`Fetch error: ${response.status} - ${response.statusText}`);
+          // Optionally, log the response body for more details
+          const responseBody = await response.text();
+          console.error(`Response body: ${responseBody}`);
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, [])
 
   useEffect(() => {
