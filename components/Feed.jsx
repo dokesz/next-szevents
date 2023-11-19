@@ -32,7 +32,10 @@ const Feed = () => {
 
   const fetcher = (...args) => fetch(...args).then(res => res.json());
 
-  const { data: posts, error, isLoading } = useSWR('/api/szevent', fetcher);
+  const { data: posts, error, isLoading } = useSWR('/api/szevent', fetcher, {
+    revalidateOnMount: true,
+    revalidateOnFocus: true,
+  });
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
@@ -130,7 +133,7 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-      {searchText === "" ? (
+      {posts.length > 0 && searchText === "" ? (
         Object.entries(groupEvents).map(([tag, post]) => {
           return (
             <div key={tag}>
