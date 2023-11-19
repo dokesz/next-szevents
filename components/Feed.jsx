@@ -15,14 +15,13 @@ const Feed = () => {
   const [groupEvents, setGroupEvents] = useState({});
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  let api_url = process.env.API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     let isMounted = true; // Guard against unmounted component updates
     const fetchPosts = async () => {
       if (isLoading) {
         try {
-          const response = await fetch(`${api_url}/api/szevent`, { method: 'GET' });
+          const response = await fetch('/api/szevent', { method: 'GET' });
           if (!response.ok) {
             throw new Error(`Fetch error: ${response.status}`);
           }
