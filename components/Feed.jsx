@@ -17,10 +17,10 @@ const Feed = () => {
   const [groupEvents, setGroupEvents] = useState({});
 
   const fetcher = (...args) => fetch(...args).then(res => res.json());
-  const { data: posts, error, isLoading } = useSWR('/api/szevent', fetcher);
+  const { data: posts, error, isLoading, isValidating } = useSWR('/api/szevent', fetcher);
 
   useEffect(() => {
-    if (posts) {
+    if (!isValidating && !error && posts) {
       const filterPosts = posts.filter(post =>
         post.title.includes(searchText) ||
         post.tag.includes(searchText) ||
@@ -42,7 +42,7 @@ const Feed = () => {
   const handleTagClick = tag => setSearchText(tag);
 
   if (isLoading) return <div className="flex text-center mt-4">Események lekérdezése...</div>;
-  if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Error loading events, please refresh the page.</div>;
+  if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Hiba az események betöltése során, kérlek frissítsd az oldalt!</div>;
   if (!posts) return <div className="flex text-center mt-4">Nem találhatók események.</div>;
 
   const displayData = searchText === "" ? groupEvents : filteredPosts;
