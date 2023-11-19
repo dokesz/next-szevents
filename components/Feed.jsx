@@ -16,22 +16,17 @@ const Feed = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
 
-  const fetcher = async url => {
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      const error = new Error('An error occurred while fetching the data.');
-      error.info = await res.json();
-      error.status = res.status;
-      throw error;
-    }
-
-    return res.json();
-  }
-  const { data: posts, error, isLoading, isValidating } = useSWR('/api/szevent', fetcher);
+  const fetcher = async (url) => await fetch(url, { 'method': 'GET', cache: "default" }).then(res => res.json());
+  const product_url = '/api/szevent';
+  const { data: posts, error, isLoading } = useSWR(product_url, fetcher);
 
   useEffect(() => {
-    if (!isValidating && !error && Array.isArray(posts)) {
+
+    if (!posts || error) {
+      return;
+    }
+
+    if (!error && posts) {
       const filterPosts = posts.filter(post =>
         post.title.includes(searchText) ||
         post.tag.includes(searchText) ||
@@ -47,14 +42,13 @@ const Feed = () => {
       }, {});
       setGroupEvents(groupedEvents);
     }
-  }, [searchText, posts]);
+  }, [searchText, posts, error]);
 
   const handleSearchChange = e => setSearchText(e.target.value);
   const handleTagClick = tag => setSearchText(tag);
 
-  if (isLoading) return <div className="flex text-center mt-4">Események lekérdezése...</div>;
   if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Hiba az események betöltése során, kérlek frissítsd az oldalt!</div>;
-  if (!posts) return <div className="flex text-center mt-4">Nem találhatók események.</div>;
+  if (!posts) return <div className="flex text-center mt-4">Posztok betöltése...</div>;
 
   const displayData = searchText === "" ? groupEvents : filteredPosts;
   const isGrouped = searchText === "";
@@ -71,7 +65,7 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-      {isGrouped ? (
+      {!isLoading && isGrouped ? (
         Object.entries(displayData).map(([tag, posts]) => (
           <div key={tag}>
             <h1 className="text-2xl mt-4 font-bold">{tag}</h1>
@@ -81,7 +75,6 @@ const Feed = () => {
       ) : (
         <PromptCardList data={displayData} handleTagClick={handleTagClick} />
       )}
-
     </section>
   );
 };
