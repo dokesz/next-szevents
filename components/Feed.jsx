@@ -1,7 +1,5 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import PromptCard from "./PromptCard.jsx";
-import useSWR from 'swr';
+import React, { useState, useEffect } from 'react';
+import PromptCard from './PromptCard.jsx';
 
 const PromptCardList = ({ data, handleTagClick }) => (
   <div className="prompt_layout">
@@ -12,90 +10,69 @@ const PromptCardList = ({ data, handleTagClick }) => (
 );
 
 const Feed = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
-  const [posts, setPosts] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // const fetcher = async (url) => {
-  //   const res = await fetch(url);
-
-  //   if (!res.ok) {
-  //     const error = new Error('An error occurred while fetching the data.')
-  //     // Attach extra info to the error object.
-  //     error.info = await res.json()
-  //     error.status = res.status
-  //     throw error
-  //   }
-
-  //   return res.json()
-  // }
-
-  // const product_url = '/api/szevent';
-  // const { data: posts, error, isLoading } = useSWR(product_url, fetcher);
+  const [posts, setPosts] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // Guard against unmounted component updates
     const fetchPosts = async () => {
       if (isLoading) {
-
         try {
-          const response = await fetch("/api/szevent", { method: "PUT" });
+          const response = await fetch('/api/szevent', { method: 'GET' });
           if (!response.ok) {
-            console.error(`Fetch error: ${response.status} - ${response.statusText}`);
-            // Optionally, log the response body for more details
-            const responseBody = await response.text();
-            console.error(`Response body: ${responseBody}`);
-            throw new Error("Failed to fetch data");
+            throw new Error(`Fetch error: ${response.status}`);
           }
           const data = await response.json();
-          setPosts(data);
+          if (isMounted) {
+            setPosts(data);
+            setIsLoading(false);
+          }
         } catch (error) {
-          console.error("Failed to fetch posts:", error);
-        } finally {
+          console.error('Failed to fetch posts:', error);
           setIsLoading(false);
         }
-      };
-    }
-
+      }
+    };
     fetchPosts();
-  }, [])
+    return () => {
+      isMounted = false; // Cleanup function to set isMounted flag
+    };
+  }, [isLoading]);
 
   useEffect(() => {
+    if (!posts) return;
 
-    if (!posts) {
-      return;
-    }
+    const filterPosts = posts.filter(post =>
+      post.title.includes(searchText) ||
+      post.tag.includes(searchText) ||
+      post.creator.name.includes(searchText)
+    );
+    setFilteredPosts(filterPosts);
 
-    if (posts) {
-      const filterPosts = posts.filter(post =>
-        post.title.includes(searchText) ||
-        post.tag.includes(searchText) ||
-        post.creator.name.includes(searchText)
-      );
-      setFilteredPosts(filterPosts);
+    const groupedEvents = posts.reduce((acc, post) => {
+      const tag = post.tag || 'Egyéb';
+      acc[tag] = acc[tag] || [];
+      acc[tag].push(post);
+      return acc;
+    }, {});
+    setGroupEvents(groupedEvents);
 
-      const groupedEvents = posts.reduce((acc, post) => {
-        const tag = post.tag || "Egyéb";
-        acc[tag] = acc[tag] || [];
-        acc[tag].push(post);
-        return acc;
-      }, {});
-      setGroupEvents(groupedEvents);
-    }
+    // Debugging logs
+    console.log('Filtered Posts:', filterPosts);
+    console.log('Grouped Events:', groupedEvents);
   }, [searchText, posts]);
 
   const handleSearchChange = e => setSearchText(e.target.value);
   const handleTagClick = tag => setSearchText(tag);
 
-  // if (error) return <div className="flex text-center mt-4 text-red-700 font-bold">Hiba az események betöltése során, kérlek frissítsd az oldalt!</div>;
-  // if (!posts) return <div className="flex text-center mt-4">Posztok betöltése...</div>;
+  if (isLoading) return <p>Posztok betöltése folyamatban van...</p>;
+  if (!posts) return <p>Nincs megjeleníthető poszt</p>;
 
-  if (isLoading) return <p>Posztok betöltése folyamatban van...</p>
-  if (!posts) return <p>Nincs megjeleníthető poszt</p>
-
-  const displayData = searchText === "" ? groupEvents : filteredPosts;
-  const isGrouped = searchText === "";
+  const displayData = searchText === '' ? groupEvents : filteredPosts;
+  const isGrouped = searchText === '';
 
   return (
     <section className="feed">
@@ -122,4 +99,5 @@ const Feed = () => {
     </section>
   );
 };
+
 export default Feed;
