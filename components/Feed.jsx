@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PromptCard from "./PromptCard.jsx";
 import useSWR from 'swr';
 
@@ -16,11 +16,22 @@ const Feed = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
 
-  const fetcher = (...args) => fetch(...args).then(res => res.json());
+  const fetcher = async url => {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      const error = new Error('An error occurred while fetching the data.');
+      error.info = await res.json();
+      error.status = res.status;
+      throw error;
+    }
+
+    return res.json();
+  }
   const { data: posts, error, isLoading, isValidating } = useSWR('/api/szevent', fetcher);
 
   useEffect(() => {
-    if (!isValidating && !error && posts) {
+    if (!isValidating && !error && Array.isArray(posts)) {
       const filterPosts = posts.filter(post =>
         post.title.includes(searchText) ||
         post.tag.includes(searchText) ||
@@ -70,8 +81,8 @@ const Feed = () => {
       ) : (
         <PromptCardList data={displayData} handleTagClick={handleTagClick} />
       )}
+
     </section>
   );
 };
-
 export default Feed;

@@ -2,9 +2,9 @@
 const nextConfig = {}
 
 module.exports = {
-    images: {
-      domains: ['lh3.googleusercontent.com', 'utfs.io'],
-    },
-  }
+  images: {
+    domains: ['lh3.googleusercontent.com', 'utfs.io'],
+  },
+}
 
 // module.exports = nextConfig
