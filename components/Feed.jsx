@@ -40,7 +40,7 @@ const Feed = () => {
       if (isLoading) {
 
         try {
-          const response = await fetch("/api/szevent");
+          const response = await fetch("/api/szevent", { method: "PUT" });
           if (!response.ok) {
             console.error(`Fetch error: ${response.status} - ${response.statusText}`);
             // Optionally, log the response body for more details
