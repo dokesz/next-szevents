@@ -1,19 +1,13 @@
-// "use client";
-
 import Feed from '@components/Feed';
 
 async function getEvents() {
-  const res = await fetch('https://next-szevents.vercel.app/api/szevent', {
-    cache: 'no-store',
-  });
+  const res = await fetch('https://next-szevents.vercel.app/api/szevent');
 
   return await res.json();
 }
 
 const Home = async () => {
-
   const events = await getEvents();
-  console.log(events);
 
   return (
     <section className="w-full flex-center flex-col">
