@@ -1,7 +1,7 @@
 import Feed from '@components/Feed';
 
 async function getEvents() {
-  const res = await fetch('https://next-szevents.vercel.app/api/szevent');
+  const res = await fetch('https://next-szevents.vercel.app/api/szevent', { cache: 'no-store', next: { revalidate: 0 } });
 
   return await res.json();
 }
