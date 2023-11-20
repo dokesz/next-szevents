@@ -4,10 +4,9 @@ import Feed from '@components/Feed';
 import { revalidatePath } from 'next/cache'
 
 async function getEvents() {
-  const revalidate = revalidatePath('/');
   const res = await fetch('http://localhost:3000/api/szevent', {
     method: 'GET', next: {
-      revalidate: revalidate,
+      revalidate: 1,
     }
   });
 
