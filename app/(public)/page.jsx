@@ -2,16 +2,17 @@
 
 import Feed from '@components/Feed';
 import { revalidatePath } from 'next/cache'
+import useSWR from 'swr';
 
 async function getEvents() {
-  const revalidate = revalidatePath('/');
-  const res = await fetch('https://next-szevents.vercel.app/api/szevent', {
-    method: 'GET', next: {
-      revalidate: revalidate,
-    }
-  });
+  const fetcher = (...args) => fetch(...args).then(res => res.json())
+  const { data } = useSWR('https://next-szevents.vercel.app/api/szevent', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+  })
 
-  return await res.json();
+  return data;
 }
 
 const Home = async () => {
