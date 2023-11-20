@@ -19,36 +19,9 @@ const Feed = ({ events }) => {
 
   useEffect(() => {
     if (!events) return;
-    // const parsedEvents = JSON.parse(events);
     setPosts(events);
     setIsLoading(false);
   }, [events]);
-
-  // useEffect(() => {
-  //   let isMounted = true; // Guard against unmounted component updates
-  //   const fetchPosts = async () => {
-  //     if (isLoading) {
-  //       try {
-  //         const response = await fetch('/api/szevent', { method: 'GET' });
-  //         if (!response.ok) {
-  //           throw new Error(`Fetch error: ${response.status}`);
-  //         }
-  //         const data = await response.json();
-  //         if (isMounted) {
-  //           setPosts(data);
-  //           setIsLoading(false);
-  //         }
-  //       } catch (error) {
-  //         console.error('Failed to fetch posts:', error);
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   };
-  //   fetchPosts();
-  //   return () => {
-  //     isMounted = false; // Cleanup function to set isMounted flag
-  //   };
-  // }, [isLoading]);
 
   useEffect(() => {
     if (!posts) return;
