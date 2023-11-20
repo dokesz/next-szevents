@@ -6,7 +6,7 @@ import { connectToDatabase } from "@utils/database";
 
 async function getEvents() {
   await connectToDatabase();
-  const response = await Event.find({});
+  const response = await Event.find({}).populate('creator');
   return JSON.stringify(response);
 }
 
