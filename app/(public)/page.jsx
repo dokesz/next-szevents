@@ -4,9 +4,10 @@ import Feed from '@components/Feed';
 import { revalidatePath } from 'next/cache'
 
 async function getEvents() {
+  const revalidate = revalidatePath('/');
   const res = await fetch('https://next-szevents.vercel.app/api/szevent', {
     method: 'GET', next: {
-      revalidate: 1,
+      revalidate: revalidate,
     }
   });
 
