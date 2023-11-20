@@ -7,6 +7,8 @@ import Event from "@models/event";
 
 // export const revalidate = 0;
 
+export const dynamic = "force-dynamic";
+
 export const GET = async () => {
   try {
     await connectToDatabase();
