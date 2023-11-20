@@ -4,9 +4,7 @@ import Feed from '@components/Feed';
 
 async function getEvents() {
   const res = await fetch('https://next-szevents.vercel.app/api/szevent', {
-    next: {
-      revalidate: 0,
-    }
+    cache: 'no-cache',
   });
 
   return await res.json();
