@@ -5,7 +5,7 @@ import Event from "@models/event";
 //it is an async function that takes in a request object
 //it connects to the database and then fetches all prompts 
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
 export const GET = async () => {
   try {

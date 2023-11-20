@@ -19,8 +19,8 @@ const Feed = ({ events }) => {
 
   useEffect(() => {
     if (!events) return;
-    const parsedEvents = JSON.parse(events);
-    setPosts(parsedEvents);
+    // const parsedEvents = JSON.parse(events);
+    setPosts(events);
     setIsLoading(false);
   }, [events]);
 

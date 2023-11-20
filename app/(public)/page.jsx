@@ -1,13 +1,17 @@
 // "use client";
 
 import Feed from '@components/Feed';
-import Event from '@models/event';
-import { connectToDatabase } from "@utils/database";
+import { revalidatePath } from 'next/cache'
 
 async function getEvents() {
-  await connectToDatabase();
-  const response = await Event.find({}).populate('creator');
-  return JSON.stringify(response);
+  revalidatePath('/');
+  const res = await fetch('http://localhost:3000/api/szevent', {
+    method: 'GET', next: {
+      revalidate: revalidatePath,
+    }
+  });
+
+  return await res.json();
 }
 
 const Home = async () => {
