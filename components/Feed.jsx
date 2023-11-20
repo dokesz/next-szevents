@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import PromptCard from './PromptCard.jsx';
 
@@ -9,7 +10,7 @@ const PromptCardList = ({ data, handleTagClick }) => (
   </div>
 );
 
-const Feed = () => {
+const Feed = ({ events }) => {
   const [searchText, setSearchText] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
@@ -17,30 +18,37 @@ const Feed = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // Guard against unmounted component updates
-    const fetchPosts = async () => {
-      if (isLoading) {
-        try {
-          const response = await fetch('/api/szevent', { method: 'GET' });
-          if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status}`);
-          }
-          const data = await response.json();
-          if (isMounted) {
-            setPosts(data);
-            setIsLoading(false);
-          }
-        } catch (error) {
-          console.error('Failed to fetch posts:', error);
-          setIsLoading(false);
-        }
-      }
-    };
-    fetchPosts();
-    return () => {
-      isMounted = false; // Cleanup function to set isMounted flag
-    };
-  }, [isLoading]);
+    if (!events) return;
+    const parsedEvents = JSON.parse(events);
+    setPosts(parsedEvents);
+    setIsLoading(false);
+  }, [events]);
+
+  // useEffect(() => {
+  //   let isMounted = true; // Guard against unmounted component updates
+  //   const fetchPosts = async () => {
+  //     if (isLoading) {
+  //       try {
+  //         const response = await fetch('/api/szevent', { method: 'GET' });
+  //         if (!response.ok) {
+  //           throw new Error(`Fetch error: ${response.status}`);
+  //         }
+  //         const data = await response.json();
+  //         if (isMounted) {
+  //           setPosts(data);
+  //           setIsLoading(false);
+  //         }
+  //       } catch (error) {
+  //         console.error('Failed to fetch posts:', error);
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   };
+  //   fetchPosts();
+  //   return () => {
+  //     isMounted = false; // Cleanup function to set isMounted flag
+  //   };
+  // }, [isLoading]);
 
   useEffect(() => {
     if (!posts) return;
