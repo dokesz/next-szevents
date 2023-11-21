@@ -21,7 +21,7 @@ const EventPage = ({ params }) => {
 
     return (
 
-        <div className="flex gap-2 ">
+        <div className="flex gap-2 justify-center items-center">
 
             <PropmtCard
                 post={post}
