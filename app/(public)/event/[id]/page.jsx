@@ -3,7 +3,7 @@ import PropmtCard from "@components/PromptCard";
 import GoogleMaps from "@components/GoogleMaps";
 
 async function getEvent(id) {
-    const data = await fetch(`http://localhost:3000/api/test/${id}`);
+    const data = await fetch(`https://next-szevents.vercel.app/api/test/${id}`);
     return data.json();
 }
 
