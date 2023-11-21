@@ -1,7 +1,7 @@
 import Feed from '@components/Feed';
 
 async function getEvents() {
-  const data = await fetch('http://localhost:3000/api/szevent');
+  const data = await fetch('https://next-szevents.vercel.app/api/szevent');
 
   if (!data.ok) {
     throw new Error('Network response was not ok');
