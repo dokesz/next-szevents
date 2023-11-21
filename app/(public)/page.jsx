@@ -1,16 +1,19 @@
 import Feed from '@components/Feed';
-import Event from '@models/event';
-import { connectToDatabase } from '@utils/database';
 
 async function getEvents() {
-  await connectToDatabase();
-  const events = await Event.find({})
-    .populate("creator", "-email")
-  return JSON.parse(JSON.stringify(events));
+  const data = await fetch('http://localhost:3000/api/szevent');
+
+  if (!data.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  return data.json();
 }
 
 const Home = async () => {
   const events = await getEvents();
+
+  console.log('events', events);
 
   return (
     <section className="w-full flex-center flex-col">
