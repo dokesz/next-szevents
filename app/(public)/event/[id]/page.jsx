@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import PropmtCard from "@components/PromptCard";
+import GoogleMaps from "@components/GoogleMaps";
 
 const EventPage = ({ params }) => {
     const [post, setPost] = useState(null);
@@ -19,9 +20,16 @@ const EventPage = ({ params }) => {
     }, [params?.id]);
 
     return (
-        <PropmtCard
-            post={post}
-        />
+
+        <div className="flex gap-2 ">
+
+            <PropmtCard
+                post={post}
+            />
+            <GoogleMaps />
+        </div>
+
+
     );
 };
 
