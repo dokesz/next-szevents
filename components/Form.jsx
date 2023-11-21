@@ -55,6 +55,19 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
         </label>
         <label>
           <span className="font-semibold text-base text-gray-700">
+            Esemény dátuma
+          </span>
+          <input
+            value={post.date}
+            onChange={(e) => setPost({ ...post, date: e.target.value })}
+            placeholder="Ide írd az esemény dátumát"
+            required
+            className="form_input"
+            type="date"
+          ></input>
+        </label>
+        <label>
+          <span className="font-semibold text-base text-gray-700">
             Adj hozzá egy tag-et{" "}
             <span className="font-normal">
               (koncert, hivatalos, egyéb)

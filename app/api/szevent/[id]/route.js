@@ -23,7 +23,7 @@ export const GET = async (request, { params }) => {
 
 // PATCH (update)
 export const PATCH = async (request, { params }) => {
-  const { title, tag, description, image } = await request.json();
+  const { title, tag, description, date, image } = await request.json();
 
   try {
     await connectToDatabase();
@@ -36,6 +36,7 @@ export const PATCH = async (request, { params }) => {
 
     existingEvent.title = title;
     existingEvent.description = description;
+    existingEvent.date = date;
     existingEvent.tag = tag;
     existingEvent.image = image;
 

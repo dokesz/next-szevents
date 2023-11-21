@@ -8,7 +8,9 @@ import Form from "@/components/Form";
 
 const CreatePrompt = () => {
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({ title: "", tag: "", description: "", image: "" });
+  const [post, setPost] = useState({ title: "", tag: "", description: "", date: "", image: "" });
+
+  console.log('post', post);
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -31,6 +33,7 @@ const CreatePrompt = () => {
           userId: session?.user.id,
           tag: post.tag,
           description: post.description,
+          date: post.date,
           image: post.image,
         }),
       });

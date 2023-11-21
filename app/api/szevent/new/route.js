@@ -2,7 +2,7 @@ import { connectToDatabase } from "@utils/database";
 import Event from "@models/event";
 
 export const POST = async (req, res) => {
-  const { userId, title, tag, description, image } = await req.json();
+  const { userId, title, tag, description, date, image } = await req.json();
 
   try {
     await connectToDatabase();
@@ -11,6 +11,7 @@ export const POST = async (req, res) => {
       title,
       tag,
       description,
+      date,
       image,
     });
 

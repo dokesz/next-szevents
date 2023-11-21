@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import PromptCard from './PromptCard.jsx';
+import { format, parseISO, isValid } from 'date-fns';
 
 const PromptCardList = ({ data, handleTagClick }) => (
   <div className="prompt_layout">
@@ -23,16 +24,19 @@ const Feed = ({ events }) => {
     setIsLoading(false);
   }, [events]);
 
-  console.log('Posts:', posts);
-
   useEffect(() => {
     if (!Array.isArray(posts)) return;
 
-    const filterPosts = posts.filter(post =>
-      post.title.includes(searchText) ||
-      post.tag.includes(searchText) ||
-      post.creator.name.includes(searchText)
-    );
+    const filterPosts = posts.filter(post => {
+      const formattedDate = isValid(parseISO(post.date)) ? format(parseISO(post.date), "yyyy-MM-dd") : '';
+
+      return (
+        post.title.includes(searchText) ||
+        post.tag.includes(searchText) ||
+        post.creator.name.includes(searchText) ||
+        formattedDate.includes(searchText)
+      );
+    });
     setFilteredPosts(filterPosts);
 
     const groupedEvents = posts.reduce((acc, post) => {
@@ -58,7 +62,7 @@ const Feed = ({ events }) => {
       <form className="relative w-full flex-center">
         <input
           type="text"
-          placeholder="Search by tag, title, or username"
+          placeholder="Keress név, tag, dátum vagy cím alapján"
           value={searchText}
           onChange={handleSearchChange}
           required

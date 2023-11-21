@@ -13,14 +13,14 @@ const EditPrompt = () => {
   const promptId = searchParams.get("id");
 
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({ title: "", tag: "", description: "", image: "" });
+  const [post, setPost] = useState({ title: "", tag: "", description: "", date: "", image: "" });
 
   useEffect(() => {
     const getPromptDetails = async () => {
       const response = await fetch(`/api/szevent/${promptId}`);
       const data = await response.json();
 
-      setPost({ title: data.title, tag: data.tag, image: data.image, description: data.description });
+      setPost({ title: data.title, tag: data.tag, image: data.image, description: data.description, date: data.date });
     };
     if (promptId) getPromptDetails();
   }, [promptId]);
@@ -41,6 +41,7 @@ const EditPrompt = () => {
           title: post.title,
           tag: post.tag,
           description: post.description,
+          date: post.date,
           image: post.image
         }),
       });

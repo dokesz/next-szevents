@@ -18,6 +18,10 @@ const EventSchema = new Schema({
         type: String,
         required: [true, 'Please provide a description.'],
     },
+    date: {
+        type: Date,
+        required: [true, 'Please provide a date.'],
+    },
     image: {
         type: String,
         required: [true, 'Please provide an image.'],

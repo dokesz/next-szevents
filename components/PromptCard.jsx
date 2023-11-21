@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { format, isValid, parseISO } from 'date-fns';
 
 const PropmtCard = ({ post, handleTagClick, handleEdit, handleDelete, tag }) => {
   const { data: session } = useSession();
   const [promptCardWidth, setPromptCardWidth] = useState("");
   const pathName = usePathname();
   const router = useRouter();
+
+  const safeDate = parseISO(post?.date);
+  const formattedDate = isValid(safeDate) ? format(safeDate, "yyyy-MM-dd") : "Nem található dátum";
 
   useEffect(() => {
     if (pathName === "/") {
@@ -54,6 +58,7 @@ const PropmtCard = ({ post, handleTagClick, handleEdit, handleDelete, tag }) => 
         }
       </div>
       <p className="text-center my-4 text-gray-700 font-bold text-lg">{post?.title}</p>
+      <h1 className="text-center">{formattedDate}</h1>
       {useParams().id && (
         <h1 className="text-center my-4 text-sm text-gray-700">{post?.description}</h1>
       )}
