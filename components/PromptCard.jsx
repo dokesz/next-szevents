@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
 
 const PropmtCard = ({ post, handleTagClick, handleEdit, handleDelete, tag }) => {
   const { data: session } = useSession();
@@ -49,14 +48,14 @@ const PropmtCard = ({ post, handleTagClick, handleEdit, handleDelete, tag }) => 
         {
           post?.image && (
             <div className="text-center mt-2">
-              <Image src={post?.image} width={300} height={120} alt="post image" className="mx-auto mt-2 object-contain" />
+              <Image src={post?.image} width={400} height={120} alt="post image" className="mx-auto mt-2 object-contain" />
             </div>
           )
         }
       </div>
-      <p className="text-center my-4 text-sm text-gray-700">{post?.title}</p>
+      <p className="text-center my-4 text-gray-700 font-bold text-lg">{post?.title}</p>
       {useParams().id && (
-        <p className="text-center my-4 text-sm text-gray-700">{post?.description}</p>
+        <h1 className="text-center my-4 text-sm text-gray-700">{post?.description}</h1>
       )}
       <p
         className="text-sm blue_gradient cursor-pointer"
