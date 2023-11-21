@@ -5,20 +5,20 @@ import Event from "@models/event";
 //it is an async function that takes in a request object
 //it connects to the database and then fetches all prompts 
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const GET = async () => {
   try {
     await connectToDatabase();
-    const prompts = await Event.find({})
+    const events = await Event.find({})
       .populate("creator", "-email")
-    return new Response(JSON.stringify(prompts), { status: 200 });
+    return new Response(JSON.stringify(events), { status: 200 });
   } catch (error) {
-    console.error("Failed to fetch all prompts:", error);
+    console.error("Failed to fetch all events:", error);
     return new Response(
-      JSON.stringify({ error: "Failed to fetch all prompts" }),
+      JSON.stringify({ error: "Failed to fetch all events" }),
       { status: 500 }
     );
   }

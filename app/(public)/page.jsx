@@ -1,9 +1,12 @@
 import Feed from '@components/Feed';
+import Event from '@models/event';
+import { connectToDatabase } from '@utils/database';
 
 async function getEvents() {
-  const res = await fetch('https://next-szevents.vercel.app/api/szevent', { cache: 'no-store', next: { revalidate: 0 } });
-
-  return await res.json();
+  await connectToDatabase();
+  const events = await Event.find({})
+    .populate("creator", "-email")
+  return JSON.parse(JSON.stringify(events));
 }
 
 const Home = async () => {
@@ -13,7 +16,11 @@ const Home = async () => {
     <section className="w-full flex-center flex-col">
       <h1 className="text-2xl font-bold md:mt-4 mt-6 mb-4">Itt láthatod az összes elérhető rendezvényt!</h1>
 
-      <Feed events={events} />
+      {events ? (
+        <Feed events={events} />
+      ) : (
+        <p className="text-lg">Nincs megjeleníthető esemény.</p>
+      )}
     </section>
   );
 };

@@ -14,7 +14,7 @@ const Feed = ({ events }) => {
   const [searchText, setSearchText] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [groupEvents, setGroupEvents] = useState({});
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,8 +23,10 @@ const Feed = ({ events }) => {
     setIsLoading(false);
   }, [events]);
 
+  console.log('Posts:', posts);
+
   useEffect(() => {
-    if (!posts) return;
+    if (!Array.isArray(posts)) return;
 
     const filterPosts = posts.filter(post =>
       post.title.includes(searchText) ||
@@ -40,10 +42,6 @@ const Feed = ({ events }) => {
       return acc;
     }, {});
     setGroupEvents(groupedEvents);
-
-    // Debugging logs
-    console.log('Filtered Posts:', filterPosts);
-    console.log('Grouped Events:', groupedEvents);
   }, [searchText, posts]);
 
   const handleSearchChange = e => setSearchText(e.target.value);
