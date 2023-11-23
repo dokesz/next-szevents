@@ -23,11 +23,6 @@ const Home = async () => {
 
       <Test/>
 
-      {events ? (
-        <Feed events={events} />
-      ) : (
-        <p className="text-lg">Nincs megjeleníthető esemény.</p>
-      )}
     </section>
   );
 };
