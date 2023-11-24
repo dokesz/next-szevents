@@ -1,6 +1,6 @@
 import Test from '@components/Test';
 import Loading from './loading';
-import Suspense from 'react';
+import { Suspense } from 'react';
 
 
 const Home = async () => {
