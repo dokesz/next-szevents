@@ -1,5 +1,5 @@
 {
-  "name": "nextjs_crud_app",
+  "name": "next-szevents",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/env": "14.0.4-canary.13",
+    "@next/env": "14.0.4-canary.16",
     "@react-google-maps/api": "^2.19.2",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
