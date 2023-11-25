@@ -1,17 +1,19 @@
 import Feed from '@components/Feed';
 
 async function getEvents() {
-  const data = await fetch('https://next-szevents.vercel.app/api/szevent', {
-    next: {
-      revalidate: 0,
-    }
-  });
-
-  if (!data.ok) {
+  // 3 sec delay
+  // await new Promise((resolve) => setTimeout(resolve, 100));
+  let url = '';
+  if (process.env.NODE_ENV === 'development') {
+    url = `${process.env.NEXT_PUBLIC_LOCALHOST_URL}/api/szevent`;
+  } else {
+    url = `${process.env.NEXT_PUBLIC_PRODUCTION_URL}/api/szevent`;
+  }
+  const response = await fetch(url);
+  if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-
-  return data.json();
+  return response.json();
 }
 
 const Home = async () => {
