@@ -3,7 +3,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 export default function Loading() {
     return (
         <>
-            <Skeleton />
+            <Skeleton height={40} />
             <LoadingFeed />
             <LoadingFeed />
             <LoadingFeed />
@@ -15,13 +15,13 @@ export default function Loading() {
 export function LoadingFeed() {
     return (
         <>
-            <Skeleton width={100} className='my-4' />
+            <Skeleton width={100} height={30} className='mt-6 mb-6' />
             <div>
                 <div className='flex items-center gap-4'>
                     <Skeleton circle width={40} height={40} />
-                    <Skeleton width={200} />
+                    <Skeleton width={250} />
                 </div>
-                <Skeleton height={250} width={350} />
+                <Skeleton height={350} width={350} />
             </div>
         </>
     )
