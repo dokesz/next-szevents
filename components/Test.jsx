@@ -2,7 +2,7 @@ import Feed from '@components/Feed';
 
 async function getEvents() {
   // 3 sec delay
-  // await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 300));
   let url = '';
   if (process.env.NODE_ENV === 'development') {
     url = `${process.env.NEXT_PUBLIC_LOCALHOST_URL}/api/szevent`;
