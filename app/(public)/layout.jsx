@@ -1,4 +1,3 @@
-import "@uploadthing/react/styles.css";
 import "../globals.css";
 import { Montserrat } from "next/font/google";
 import Nav from "@/components/Nav";
