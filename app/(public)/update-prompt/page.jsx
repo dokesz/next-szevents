@@ -20,7 +20,10 @@ const EditPrompt = () => {
       const response = await fetch(`/api/szevent/${promptId}`);
       const data = await response.json();
 
-      setPost({ title: data.title, tag: data.tag, image: data.image, description: data.description, date: data.date });
+      //the date format is not correct, it should be YYYY-MM-DD
+      const date = data.date.split('T')[0];
+
+      setPost({ title: data.title, tag: data.tag, image: data.image, description: data.description, date: date });
     };
     if (promptId) getPromptDetails();
   }, [promptId]);
@@ -34,16 +37,21 @@ const EditPrompt = () => {
 
     if (!promptId) return alert("Prompt ID not found");
 
+    const requestBody = {
+      title: post.title,
+      tag: post.tag,
+      description: post.description,
+      date: post.date,
+    };
+    
+    if (post.image) {
+      requestBody.image = post.image;
+    }
+
     try {
       const response = await fetch(`/api/szevent/${promptId}`, {
         method: "PATCH",
-        body: JSON.stringify({
-          title: post.title,
-          tag: post.tag,
-          description: post.description,
-          date: post.date,
-          image: post.image
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {

@@ -83,13 +83,21 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             className="form_input"
           ></input>
         </label>
-        <label>
+        <label className="flex flex-col">
           <span className="font-semibold text-base text-gray-700">
             Kép feltöltése
           </span>
           <UploadButton appearance={{ button: "px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white", container: "w-max flex-row rounded-md p-1 border-cyan-300 bg-slate-800", allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-white", }} endpoint="imageUploader" onClientUploadComplete={handleUploadComplete} onUploadError={handleUploadError} />
-
         </label>
+        <div>
+          {post.image && (
+            <>
+              <span className="font-semibold text-base text-gray-700">Feltöltött kép előnézet</span>
+              <img src={post.image} alt="Uploaded Image" className="w-24 h-24" />
+            </>
+          )
+          }
+        </div>
 
         <div className="flex-end mx-3 mb-5 gap-4">
           <Link href="/" className="text-gray-500 text-md">
@@ -98,8 +106,8 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
 
           <button
             type="submit"
-            disabled={submitting || !uploadComplete}
-            className={`px-5 py-1.5 text-md bg-primary-orange rounded-full text-black ${submitting || !uploadComplete ? 'cursor-not-allowed' : ''}`}
+            disabled={submitting}
+            className={`px-5 py-1.5 text-md bg-primary-orange rounded-full text-black`}
           >
             {submitting ? `${type}...` : type}
           </button>
