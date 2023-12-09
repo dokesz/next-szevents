@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
   const [uploadComplete, setUploadComplete] = useState(false);
@@ -12,6 +13,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
     // Do something with the response
     setPost({ ...post, image: res[0].url });
     setUploadComplete(true); // Set upload status to complete
+    toast.success('Sikeresen feltöltötted a képet!')
   };
 
   const handleUploadError = (error) => {
@@ -70,34 +72,23 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
           <span className="font-semibold text-base text-gray-700">
             Adj hozzá egy tag-et{" "}
             <span className="font-normal">
-              (koncert, hivatalos, egyéb)
+              (# nélkül és egy darabot, pl: tag1)
             </span>
           </span>
           <input
             value={post.tag}
             onChange={(e) => setPost({ ...post, tag: e.target.value })}
-            placeholder="#tag"
+            placeholder="tag"
             required
             className="form_input"
           ></input>
         </label>
         <label>
           <span className="font-semibold text-base text-gray-700">
-            Image Upload
+            Kép feltöltése
           </span>
-          <UploadButton
-            appearance={{
-              button:
-                "px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white",
-              container:
-                "w-max flex-row rounded-md p-1 border-cyan-300 bg-slate-800",
-              allowedContent:
-                "flex h-8 flex-col items-center justify-center px-2 text-white",
-            }}
-            endpoint="imageUploader"
-            onClientUploadComplete={handleUploadComplete}
-            onUploadError={handleUploadError}
-          />
+          <UploadButton appearance={{ button: "px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white", container: "w-max flex-row rounded-md p-1 border-cyan-300 bg-slate-800", allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-white", }} endpoint="imageUploader" onClientUploadComplete={handleUploadComplete} onUploadError={handleUploadError} />
+
         </label>
 
         <div className="flex-end mx-3 mb-5 gap-4">
@@ -108,12 +99,13 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
           <button
             type="submit"
             disabled={submitting || !uploadComplete}
-            className="px-5 py-1.5 text-md bg-primary-orange rounded-full text-black"
+            className={`px-5 py-1.5 text-md bg-primary-orange rounded-full text-black ${submitting || !uploadComplete ? 'cursor-not-allowed' : ''}`}
           >
             {submitting ? `${type}...` : type}
           </button>
         </div>
       </form>
+      <Toaster />
     </section>
   );
 };

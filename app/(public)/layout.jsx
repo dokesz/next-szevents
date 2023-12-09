@@ -1,3 +1,4 @@
+import "@uploadthing/react/styles.css";
 import "../globals.css";
 import { Montserrat } from "next/font/google";
 import Nav from "@/components/Nav";
@@ -13,7 +14,7 @@ export const metadata = {
 
 export default function PublicLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="hu">
       <body className={montserrat.className}>
         <Provider>
           <div className="max-w-7xl m-auto p-4">

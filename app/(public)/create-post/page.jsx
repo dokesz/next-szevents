@@ -51,7 +51,7 @@ const CreatePrompt = () => {
 
   return (
     <Form
-      type="létrehozás"
+      type="Létrehozás"
       post={post}
       setPost={setPost}
       submitting={submitting}
