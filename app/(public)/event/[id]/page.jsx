@@ -10,7 +10,7 @@ async function getEvent(id) {
 export default async function EventPage({ params }) {
     const post = await getEvent(params.id);
     return (
-        <div className="flex gap-2 justify-center items-center">
+        <div className="flex flex-col md:flex-row gap-2 justify-center items-center">
             <PropmtCard post={post} />
             <GoogleMaps />
         </div>
