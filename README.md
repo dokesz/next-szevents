@@ -71,7 +71,7 @@ We welcome contributions to the Szevents project. If you're interested in contri
 
 ## License
 
-This project is license under the [`MIT License`](https://opensource.org/license/mit/)
+This project is licensed under the [`MIT License`](https://opensource.org/license/mit/)
 
 ## Learn More
 
