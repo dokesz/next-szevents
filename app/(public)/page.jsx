@@ -1,5 +1,5 @@
 "use client"
-import Test from '@components/Test';
+import EventsPage from '@components/EventsPage';
 import Loading from './loading';
 import { Suspense } from 'react';
 
@@ -9,7 +9,7 @@ const Home = async () => {
     <section className="w-full flex-center flex-col min-h-[1000px]">
       <h1 className="text-2xl font-bold md:mt-4 mt-6 mb-4">Itt láthatod az összes elérhető rendezvényt!</h1>
       <Suspense fallback={<Loading />}>
-        <Test />
+        <EventsPage />
       </Suspense>
 
     </section>

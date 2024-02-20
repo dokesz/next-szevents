@@ -1,10 +1,6 @@
 import { connectToDatabase } from "@utils/database";
 import Event from "@models/event";
 
-//this is a get request that fetches all prompts from the database
-//it is an async function that takes in a request object
-//it connects to the database and then fetches all prompts 
-
 export const revalidate = 0;
 
 export const GET = async () => {

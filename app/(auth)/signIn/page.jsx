@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { redirect, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 
