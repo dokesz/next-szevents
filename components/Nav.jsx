@@ -33,7 +33,7 @@ export default function Nav() {
           {status === "authenticated" ? (
             <button onClick={() => signOut()}>Kijelentkezés</button>
           ) : (
-            <Link href="/signIn">Bejelentkezés</Link>
+            <Link href="/login">Bejelentkezés</Link>
           )}
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function Nav() {
           {status === "authenticated" ? (
             <button onClick={() => signOut()}>Kijelentkezés</button>
           ) : (
-            <Link href="/signIn">Bejelentkezés</Link>
+            <Link href="/login">Bejelentkezés</Link>
           )}
         </div>
       )}
