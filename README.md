@@ -1,22 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Szevents
+
+## Description
+
+This is a full-stack web application built with [Next.js](https://nextjs.org/), [React](https://react.dev/), [MongoDB](https://www.mongodb.com/atlas) and [Tailwind](https://tailwindcss.com/). The application allows users to create, view, and update events. This project was developed for "Projektmunka 2." subject in the university.
+
+## Features
+
+- User authentication
+- User profiles
+- Event CRUD (Create, Read, Update, Delete)
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js (v14 or later recommended)
+- A MongoDB account and cluster set up
+- Google Cloud account for OAuth 2.0 credentials
+- An Uploadthing account for image upload functionality
+
+## Project Structure
+
+- `app/`: Contains the application's pages and API routes.
+- `components/`: Reusable React components.
+- `models/`: Data models for MongoDB.
+- `public/`: Static files like images.
+- `styles/`: Global CSS styles.
+- `utils/`: Utility functions and configurations.
+
+## Environment Variables
+
+Set up your environment variables by creating a `.env` file based on the `.example.env` template. Here is a list of required variables and their purposes:
+
+- `GOOGLE_CLIENT_ID`: Your Google Cloud Console client ID for OAuth 2.0.
+- `GOOGLE_CLIENT_SECRET`: The client secret associated with your Google Client ID.
+- `MONGODB_URI`: Your MongoDB cluster connection URI.
+- `UPLOADTHING_APP_ID`: Your Uploadthing ID.
+- `UPLOADTHING_SECRET`: Your Uploadthing API key for image upload functionality.
+
+## Technologies
+
+- Next.js version: 14.0.3
+- Next-auth version: 4.24.5
+- React version: 18.2.0
+- Tailwind version: 3.3.3
+- UploadThing version: 5.7.4
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running follow these simple steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+1. **Clone the Repository**
+   ```sh
+   git clone https://github.com/dokesz/next-szevents.git
+   ```
+2. **Install dependencies**
+   ```sh
+   cd szevents
+   npm install
+   ```
+3. **Run the app**
+   ```sh
+   npm run dev
+   ```
+   The application should now be running on `http://localhost:3000`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We welcome contributions to the Szevents project. If you're interested in contributing, please fork the repository and submit a pull request with your proposed changes. See our contributing guidelines for more information on how to get started.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## License
+
+This project is license under the [`MIT License`](https://opensource.org/license/mit/)
 
 ## Learn More
 
